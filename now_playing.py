@@ -1,3 +1,4 @@
+from set_tokens import *
 from requests.exceptions import ReadTimeout
 
 import time
@@ -19,7 +20,7 @@ scope = "user-library-read,\
         user-library-modify,\
         user-library-read"
 
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope), requests_timeout=10, retries=10)
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(cache_path='/home/pi/Code/SpIOTify/.cache',open_browser=False,scope=scope, client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET,redirect_uri=SPOTIPY_REDIRECT_URI), requests_timeout=10, retries=10)
 
 def publish(message):
     paho.single(MQTT_NOW_PLAYING_TOPIC, message, qos=1, hostname=MQTT_BROKER)

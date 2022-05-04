@@ -1,3 +1,5 @@
+from set_tokens import *
+
 import paho.mqtt.client as mqtt
 import paho.mqtt.publish as paho
 
@@ -18,7 +20,7 @@ scope = "user-library-read,\
         user-library-modify,\
         user-library-read"
 
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(cache_path='/home/pi/Code/SpIOTify/.cache',scope=scope, client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET,redirect_uri=SPOTIPY_REDIRECT_URI), requests_timeout=10, retries=10)
 
 
 
