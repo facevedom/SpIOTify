@@ -36,7 +36,6 @@ while True:
         if last_played['item']['id'] != current_track['item']['id']:
             current_track['saved'] = sp.current_user_saved_tracks_contains(tracks=[current_track['item']['id']])
             print("New song playing: " + current_track['item']['name'])
-            print(current_track['saved'])
             publish(current_track['item']['name'])
             last_played = current_track
     except:

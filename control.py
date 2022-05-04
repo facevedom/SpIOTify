@@ -47,6 +47,14 @@ def execute(action):
         print('> Previous song')
         sp.previous_track()
 
+    elif action == 'shuffle':
+        shuffle = bool(sp.current_playback()['shuffle_state'])
+        if shuffle:
+            print('> Shuffle off')
+        else:
+            print('> Shuffle on')
+        sp.shuffle(not shuffle)
+
     elif action == 'save':
         song = sp.current_user_playing_track()
         print('> Added ' + song['item']['name'] + ' to saved tracks 💚')
