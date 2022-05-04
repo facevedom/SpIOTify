@@ -22,7 +22,7 @@ scope = "user-library-read,\
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope), requests_timeout=10, retries=10)
 
 def publish(message):
-    paho.single(MQTT_NOW_PLAYING_TOPIC, message, qos=2, hostname=MQTT_BROKER)
+    paho.single(MQTT_NOW_PLAYING_TOPIC, message, qos=1, hostname=MQTT_BROKER)
 
 
 last_played = {'item': {'id': ''}}
@@ -36,6 +36,7 @@ while True:
         if last_played['item']['id'] != current_track['item']['id']:
             current_track['saved'] = sp.current_user_saved_tracks_contains(tracks=[current_track['item']['id']])
             print("New song playing: " + current_track['item']['name'])
+            
             publish(current_track['item']['name'])
             last_played = current_track
     except:

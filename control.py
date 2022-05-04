@@ -1,4 +1,5 @@
 import paho.mqtt.client as mqtt
+import paho.mqtt.publish as paho
 
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
@@ -31,13 +32,16 @@ def on_message(client, userdata, msg):
 
 def execute(action):
     if action == 'toggle':
-        is_playing = sp.current_user_playing_track()['is_playing']
-        if is_playing:
-            print('> Pausing')
-            sp.pause_playback()
-        else:
-            print('> Playing')
-            sp.start_playback()
+        try:
+            is_playing = sp.current_user_playing_track()['is_playing']
+            if is_playing:
+                print('> Pausing')
+                sp.pause_playback()
+            else:
+                print('> Playing')
+                sp.start_playback()
+        except:
+            print('No active device')
     
     elif action == 'next':
         print('> Next song')
@@ -59,6 +63,13 @@ def execute(action):
         song = sp.current_user_playing_track()
         print('> Added ' + song['item']['name'] + ' to saved tracks 💚')
         sp.current_user_saved_tracks_add(tracks=[song['item']['id']])
+
+    elif action == 'initialize':
+        # repeated but necessary so the display doesn't start empty
+        # TODO find a better way
+        current_track = sp.current_user_playing_track()
+        if current_track is not None:
+            paho.single("spiotify/now_playing", current_track['item']['name'], qos=1, hostname="broker.hivemq.com")
 
 client.on_connect = on_connect
 client.on_message = on_message
